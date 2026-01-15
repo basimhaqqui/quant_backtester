@@ -367,39 +367,28 @@ class Backtester:
         else:
             execution_price = current_price + slippage  # Pay more to cover
 
+        # Calculate values
+        entry_value = position.quantity * position.entry_price
+        exit_value = position.quantity * execution_price
+
         # Calculate P&L
         gross_pnl = position.direction * position.quantity * (execution_price - position.entry_price)
 
         # Calculate commission
-        position_value = position.quantity * execution_price
-        commission = self.commission_fixed + (position_value * self.commission_pct)
+        commission = self.commission_fixed + (exit_value * self.commission_pct)
 
         # Net P&L
         net_pnl = gross_pnl - commission
 
-        # Return cash
-        self.cash += position_value * position.direction + position.quantity * position.entry_price * position.direction + net_pnl
-
-        # Actually, simpler calculation:
-        # For long: receive sale proceeds, P&L already captured
-        # For short: use margin to cover
-
-        # Correct cash handling
+        # Update cash: return the exit value for long positions
         if position.direction == 1:
-            self.cash = self.cash + position_value - commission + gross_pnl
+            self.cash += exit_value - commission
         else:
-            self.cash = self.cash + gross_pnl - commission
-
-        # Recalculate - simpler approach
-        # Reset and recalculate
-        entry_value = position.quantity * position.entry_price
-        exit_value = position.quantity * execution_price
-        total_slippage = position.quantity * slippage * 2  # Entry and exit
-
-        if position.direction == 1:
-            self.cash = self.cash + exit_value - commission
+            # For short: we received entry_value when opening, now pay exit_value to close
+            self.cash += (entry_value - exit_value) - commission
 
         pnl_pct = (execution_price / position.entry_price - 1) * position.direction
+        total_slippage = position.quantity * slippage
 
         # Record trade
         trade = Trade(

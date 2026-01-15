@@ -15,6 +15,7 @@ import pandas as pd
 import numpy as np
 from typing import Dict, List, Optional, Any, Tuple
 from itertools import combinations
+from dataclasses import dataclass
 import logging
 from scipy import stats
 
@@ -22,22 +23,6 @@ from .base import Strategy, Signal
 from config import PAIRS_TRADING_PARAMS
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class TradingPair:
-    """Represents a cointegrated trading pair."""
-    ticker_a: str
-    ticker_b: str
-    correlation: float
-    hedge_ratio: float
-    half_life: Optional[float]
-    adf_pvalue: float
-    spread_mean: float
-    spread_std: float
-
-
-from dataclasses import dataclass
 
 
 @dataclass

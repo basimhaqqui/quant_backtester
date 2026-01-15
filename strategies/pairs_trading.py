@@ -429,7 +429,7 @@ class PairsTradingStrategy(Strategy):
                     Signal(
                         ticker=pair.ticker_b,
                         direction=1,
-                        strength=strength * pair.hedge_ratio,
+                        strength=min(1.0, strength * pair.hedge_ratio),
                         timestamp=current_date,
                         metadata={
                             "pair_id": pair_id,
@@ -459,7 +459,7 @@ class PairsTradingStrategy(Strategy):
                     Signal(
                         ticker=pair.ticker_b,
                         direction=-1,
-                        strength=strength * pair.hedge_ratio,
+                        strength=min(1.0, strength * pair.hedge_ratio),
                         timestamp=current_date,
                         metadata={
                             "pair_id": pair_id,

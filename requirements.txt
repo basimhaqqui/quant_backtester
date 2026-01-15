@@ -1,0 +1,26 @@
+# Quantitative Trading Strategy Backtester - Requirements
+# Install with: pip install -r requirements.txt
+
+# Data handling and numerical computing
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Data fetching
+yfinance>=0.2.28
+
+# Visualization
+matplotlib>=3.7.0
+plotly>=5.15.0
+
+# Dashboard
+streamlit>=1.28.0
+
+# PDF generation
+fpdf2>=2.7.0
+
+# Progress bars
+tqdm>=4.65.0
+
+# Date handling
+python-dateutil>=2.8.2
